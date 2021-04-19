@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\SiteRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SiteRepository::class)
+ * @UniqueEntity("domainName")
  */
 class Site
 {
@@ -26,6 +29,7 @@ class Site
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Hostname(message="The server name must be a valid hostname.")
      */
     private $domainName;
 
@@ -127,5 +131,9 @@ class Site
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+    public function __toString()
+    {
+        return (string) $this->getDomainName();
     }
 }

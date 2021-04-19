@@ -19,6 +19,18 @@ class SiteChecksRepository extends ServiceEntityRepository
         parent::__construct($registry, SiteChecks::class);
     }
 
+    public function findTheLastTenRows(): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+             FROM App\Entity\SiteChecks p
+             ORDER BY p.createdAt DESC ')->setMaxResults(10);
+
+        return $query->getResult();
+    }
+
     // /**
     //  * @return SiteChecks[] Returns an array of SiteChecks objects
     //  */

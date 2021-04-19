@@ -5,7 +5,7 @@
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    <h1>Register</h1>
+    <h1>Registerd</h1>
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
@@ -13,7 +13,7 @@
             label: 'Password'
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
-    <button class="btn btn-lg btn-primary" data-bs-dismiss="modal" type="button">Cancel</button>
+    <sbutton class="btn btn-lg btn-primary" data-bs-dismiss="modal" type="button">Cancel</sbutton>
     <button class="btn btn-lg btn-primary" type="submit">Sign up</button>
     {{ form_end(registrationForm) }}
 </form>

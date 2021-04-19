@@ -4,27 +4,28 @@
 
 {% block body %}
 
-    {{ form(form) }}
+
+    <a href="{{ path('new_site') }}" class="btn btn-primary">Create new </a>
+
 
     <table class="table">
         <thead>
-
         <tr>
-            {% for head in headline %}
-            <th scope="col">{{ head }}</th>
-            {% endfor %}
+            <th>Domain Name</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
-
         </thead>
         <tbody>
     {% for site in sites %}
-{#        {% if site < 10 %}#}
         <tr>
             <td>{{ site.domainName }}</td>
-            <td>{{ site.status }}</td>
-            <td>{{ site.user}}</td>
-            <td>{{ site.createdAt|date }}</td>
-            <td> <a href="{{ path('site_delete', {'id': site.id})}}">Delete</a> || <a href="{{ path('site_edit', {'id': site.id})}}">Edit</a></td>
+            {% if site.status == 1 %}
+            <td>Enabled</td>
+            {% else %}
+                <td>Disabled</td>
+                {% endif %}
+            <td> <a onclick="return confirm('Are you sure to delete this row?')"data-m href="{{ path('site_delete', {'id': site.id})}}">Delete</a> || <a href="{{ path('site_edit', {'id': site.id})}}">Edit</a></td>
         </tr>
     {% endfor %}
         </tbody>

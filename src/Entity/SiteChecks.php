@@ -19,7 +19,8 @@ class SiteChecks
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="sitesCheck")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $site;
 
@@ -44,12 +45,12 @@ class SiteChecks
         return $this->id;
     }
 
-    public function getSite(): ?string
+    public function getSite(): ?Site
     {
         return $this->site;
     }
 
-    public function setSite(string $site): self
+    public function setSite(?Site $site): self
     {
         $this->site = $site;
 
