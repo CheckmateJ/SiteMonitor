@@ -6,6 +6,7 @@ use App\Entity\Site;
 use App\Entity\SiteChecks;
 use App\Repository\SiteChecksRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\TransferStats;
 use http\Env\Request;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,12 +24,10 @@ class SiteCheckCommand extends Command
     protected static $defaultDescription = 'Add a short description for your command';
 
     private $entityManager;
-    private $container;
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->container = $container;
 
         parent::__construct();
 
@@ -39,34 +38,54 @@ class SiteCheckCommand extends Command
         $this->setDescription(self::$defaultDescription);
     }
 
-    public function saveToDatabase($site)
+    public function testSite($site)
     {
-
-        $entity = $this->container->get('doctrine')->getManager();
+        $entity = $this->entityManager;
         $client = new \GuzzleHttp\Client();
-        $codeOk = 1;
-        $codeNotOk = 0;
 
         $siteCheck = new SiteChecks();
-        $response = $client->request('GET', $site->getDomainName(), ['allow_redirects' => true]);
-
         $siteCheck->setSite($site);
 
-        if ($response->getStatusCode() == 200) {
-            $siteCheck->setResult($codeOk);
-        } else {
-            $siteCheck->setResult($codeNotOk);
+        try {
+            $response = $client->request('GET', 'https://' . $site->getDomainName(), ['allow_redirects' => true, 'verify' => true,
+                'on_stats' => function (TransferStats $stats) use ($siteCheck) {
+                    $siteCheck->setCertificate($stats->getHandlerStats()['scheme']);
+                    $siteCheck->setTimeServer($stats->getTransferTime());
+                }]);
+
+            if ($response->getStatusCode() == 200) {
+                $siteCheck->setResult(SiteChecks::STATUS_OK);
+            } else {
+                $siteCheck->setResult(SiteChecks::STATUS_ERROR);
+            }
+
+            $siteCheck->setStatusCode($response->getStatusCode());
+            $siteCheck->setSslStatus(SiteChecks::STATUS_OK);
+
+        } catch (\Exception $e) {
+            $siteCheck->setError($e->getMessage());
+            if (str_contains($e->getMessage(), 'SSL')) {
+                dump($siteCheck->getStatusCode());
+                $siteCheck->setSslStatus(SiteChecks::STATUS_ERROR);
+            } else {
+                $siteCheck->setSslStatus(SiteChecks::STATUS_OK);
+            }
+            if ($siteCheck->getStatusCode() == null) {
+                $siteCheck->setStatusCode(0);
+            } else {
+                $siteCheck->setStatusCode();
+            }
+            $siteCheck->setResult(SiteChecks::STATUS_ERROR);
         }
 
-        $siteCheck->setStatusCode($response->getStatusCode());
         $entity->persist($siteCheck);
-
         $entity->flush();
+
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $em = $this->entityManager;
         $siteRepo = $em->getRepository("App:Site");
         $sites = $siteRepo->findAll();
@@ -74,29 +93,20 @@ class SiteCheckCommand extends Command
         /** @var SiteChecksRepository $siteCheckRepo */
         $siteCheckRepo = $em->getRepository("App:SiteChecks");
 
-
         /** @var Site $site */
         foreach ($sites as $site) {
 
-            $sitesChecks = $siteCheckRepo->findOneBy(['site' => $site], ['id' => 'DESC']);
+            // switch to $site->getLastSiteCheck();
+            $sitesCheck = $siteCheckRepo->findOneBy(['site' => $site], ['id' => 'DESC']);
 
-            if ($sitesChecks) {
-                $created = $sitesChecks->getCreatedAt();
-                $date = new \DateTime();
-                $interval = $date->diff($created);
-                $minutes = $interval->i;
-                $hours = $interval->h * 60;
-                $days = $interval->d * 60 * 24;
-
-                $result = $minutes + $hours + $days;
-
-                if ($result > $site->getFrequency()) {
-                    $this->saveToDatabase($site);
-                }
-
-            } else {
-                $this->saveToDatabase($site);
+            // wyrzucic - dodaj parameter przy filtrowaniu listy
+            if ($site->getStatus() != 1) {
+                continue;
             }
+            if ($sitesCheck && $sitesCheck->getCreatedAt() > new \DateTime($site->getFrequency() . " minutes ago")) {
+                continue;
+            }
+            $this->testSite($site);
         }
 
 

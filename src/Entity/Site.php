@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\SiteRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=SiteRepository::class)
@@ -54,7 +56,14 @@ class Site
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
+
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany (targetEntity=SiteChecks::class, mappedBy="site")
+     *
+     */
+    private $siteCheck;
 
     public function getId(): ?int
     {
@@ -132,8 +141,40 @@ class Site
 
         return $this;
     }
+
+    public function __construct()
+    {
+        $this->siteCheck = new ArrayCollection();
+    }
+
+    /**
+    * @return Collection|SiteChecks[]
+    */
+    public function getSiteCheck(): Collection
+    {
+        return $this->siteCheck;
+    }
+
     public function __toString()
     {
         return (string) $this->getDomainName();
     }
+
+    public function getRecentResponseTime()
+    {
+
+        $result = $this->getSiteCheck()->map(function(SiteChecks $siteCheck) {
+            return  $siteCheck->getTimeServer();
+        });
+        return $result;
+    }
+    public function getTimeCheckFromTheLastTwentyFourHour()
+    {
+        $result = $this->getSiteCheck()->map(function (SiteChecks $siteChecks){
+            return $siteChecks->getCreatedAt();
+        });
+
+        return $result;
+    }
 }
+

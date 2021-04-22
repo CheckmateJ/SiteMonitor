@@ -17,10 +17,10 @@ class SiteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $frequency = [1,5,10,15,30,60];
+        $frequency = [1, 5, 10, 15, 30, 60];
         $status = [1, 2];
         $builder
-            ->add('domainName', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
+            ->add('domainName', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
                 'disabled' => $options['is_edit']
             ])
             ->add('status', ChoiceType::class, [
@@ -32,8 +32,7 @@ class SiteType extends AbstractType
             ->add('user', EntityType::class, [
                 'class' => 'App\Entity\User',
                 'choice_label' => 'email'])
-            ->add('save', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

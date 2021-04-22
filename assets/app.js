@@ -1,12 +1,28 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
-
-// start the Stimulus application
 import './bootstrap';
+
+
+document.querySelectorAll(".recentResponseTime").forEach(item => {
+    let time = [0, 1, 2, 3, 4, 5];
+    let timeServer = item.dataset.points.split(",");
+
+    let timeServerAnswer = [];
+    for (let i = 0; i < timeServer.length; i++) {
+        timeServerAnswer.push(parseFloat(timeServer[i]));
+    }
+
+    var responseTimeChart = new Chart(item, {
+        type: 'line',
+        data: {
+            labels: time,
+            datasets: [
+                {
+                    data: timeServerAnswer
+                }
+            ]
+        }
+    });
+});
+
+
+
