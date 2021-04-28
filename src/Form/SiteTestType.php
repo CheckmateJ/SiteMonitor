@@ -2,12 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Site;
 use App\Entity\SiteTest;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\ArrayType;
-use Doctrine\DBAL\Types\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,21 +17,43 @@ class SiteTestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $site = new Site();
+        $siteTest = new SiteTest();
+
         $builder
             ->add('url')
-            ->add('type')
-            ->add('configuration', \Symfony\Component\Form\Extension\Core\Type\TextType::class, array(
-                'property_path' => 'configuration[0]'))
-            ->add('frequency')
-            ->add('site')
+            ->add('type', ChoiceType::class, [
+                'choices' => array_combine($siteTest::Type, $siteTest::Type)
+            ])
+            ->add('configuration', TextType::class)
+            ->add('frequency', ChoiceType::class, [
+                'choices' => array_combine($site::frequency, $site::frequency)
+            ])
+            ->add('site', EntityType::class, [
+                'disabled' => $options['is_edit'],
+                'class' => 'App\Entity\Site',
+                'choice_label' => 'domainName'])
             ->add('save', SubmitType::class);
-        ;
+
+        $builder->get('configuration')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($configurationAsArray) {
+                    // transform the array to a string
+                    return \json_encode($configurationAsArray);
+                },
+                function ($configurationAsArray) {
+                    // transform the string back to an array
+                    return \json_decode($configurationAsArray, true);
+                }
+            ));
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => SiteTest::class,
+            'is_edit' => false
         ]);
     }
 }

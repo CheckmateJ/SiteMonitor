@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
+    {% include '/nav/tabs.html.twig' with {'id': siteId} %}
 
     {{ form_start(form) }}
     {{ form_label(form.domainName) }}
@@ -11,29 +13,4 @@
     {{ form_label(form.frequency) }}
     {{ form_widget(form.frequency) }}
     {{ form_end(form) }}
-
-    {% if siteCheck != [] %}
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Domain Name</th>
-                <th>Status</th>
-                <th>Created at</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for site in siteCheck %}
-                <tr>
-                    <td>{{ site.site }}</td>
-                    <td>{{ site.statusCode }}</td>
-                    <td>{{ site.createdAt|date }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <a href="{{ path('site_new_advance_test') }}" class="btn btn-primary">Create new advance test</a>
-    {% endif %}
-
-    <a href="{{ path('site') }}" class="btn btn-primary">Back</a>
-
 {% endblock %}

@@ -19,16 +19,16 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $siteChecks = $this->getDoctrine()->getRepository(SiteChecks::class)->findAll();
-        foreach ($siteChecks as $siteCheck){
-            $arrSiteCheck[] = $siteCheck->getTimeServer();
-    }
+//        foreach ($siteChecks as $siteCheck){
+//            $arrSiteCheck[] = $siteCheck->getTimeServer();
+//    }
 
 
         $allSites = $this->getDoctrine()->getRepository(Site::class)->findAll();
 
         return $this->render('default/index.html.twig',[
             'allSites' => $allSites,
-            'arrSiteChecks' => $arrSiteCheck,
+            'SiteChecks' => $siteChecks,
         ]);
     }
 

@@ -3,6 +3,35 @@
 {% block title %}Hello SiteTestController!{% endblock %}
 
 {% block body %}
+    {% include '/nav/tabs.html.twig' with {'id': ''} %}
+    </br>
+    <a href="{{ path('site_new_advance_test') }}" class="btn btn-primary">Create new advance test</a>
+    </br>
+    <table class="table ">
+        <thead>
+        <tr>
+            <th scope="col">Site</th>
+            <th scope="col">Configuration</th>
+            <th scope="col">Type</th>
+            <th scope="col">Id</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
 
-Index page
+        {% for test in siteTests %}
+            <tr>
+                <td>{{ test.site }}</td>
+                <td>{{ test.configuration |json_encode }}</td>
+                <td>{{ test.type }}</td>
+                <td>{{ test.id }}</td>
+                <td><a href="{{ path ('site_edit_advance_test', {'id': test.id}) }}">Edit</a>
+                     <button class="advance-test" id="advance-test-id" data-id="{{ test.id }}">Run Test</button>
+{#                     <a class="advance-test" href="{{ path ('site_advance_test_manual', {'id': test.id})  }}">Run Test</a>#}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div id="result"></div>
 {% endblock %}

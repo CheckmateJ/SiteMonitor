@@ -17,17 +17,17 @@ class SiteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $frequency = [1, 5, 10, 15, 30, 60];
-        $status = [1, 2];
+        $site = new Site();
+
         $builder
             ->add('domainName', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
                 'disabled' => $options['is_edit']
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => array_combine($status, $status)
+                'choices' => array_combine($site::status, $site::status)
             ])
             ->add('frequency', ChoiceType::class, [
-                'choices' => array_combine($frequency, $frequency)
+                'choices' => array_combine($site::frequency, $site::frequency)
             ])
             ->add('user', EntityType::class, [
                 'class' => 'App\Entity\User',

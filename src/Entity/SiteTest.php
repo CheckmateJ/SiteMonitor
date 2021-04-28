@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SiteTest
 {
+    const Type = ['Keyword', 'Header'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -16,6 +16,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Site
 {
+    const frequency = [1, 5, 10, 15, 30, 60];
+    const status = [1, 2];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -148,8 +150,8 @@ class Site
     }
 
     /**
-    * @return Collection|SiteChecks[]
-    */
+     * @return Collection|SiteChecks[]
+     */
     public function getSiteCheck(): Collection
     {
         return $this->siteCheck;
@@ -157,24 +159,28 @@ class Site
 
     public function __toString()
     {
-        return (string) $this->getDomainName();
+        return (string)$this->getDomainName();
     }
 
     public function getRecentResponseTime()
     {
-
-        $result = $this->getSiteCheck()->map(function(SiteChecks $siteCheck) {
-            return  $siteCheck->getTimeServer();
+        // filtrowanie zeby byly sitechecki z ostatnich 24 godzin ->filter
+        $result = $this->getSiteCheck()->map(function (SiteChecks $siteCheck) {
+            $now = new \DateTime();
+            return [$now->diff($siteCheck->getCreatedAt())->h*60+$now->diff($siteCheck->getCreatedAt())->i, $siteCheck->getTimeServer()];
         });
+        dump($result);
         return $result;
     }
+
     public function getTimeCheckFromTheLastTwentyFourHour()
     {
-        $result = $this->getSiteCheck()->map(function (SiteChecks $siteChecks){
-            return $siteChecks->getCreatedAt();
+        $result = $this->getSiteCheck()->map(function (SiteChecks $siteCheck) {
+            return $siteCheck->getCreatedAt();
         });
 
         return $result;
     }
+
 }
 

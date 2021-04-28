@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include '/nav/tabs.html.twig' with {'id': 1} %}
+
+    {{ form(form) }}
+
+    <caption>Result of tests</caption>
+    <table class="table ">
+        <thead>
+        <tr>
+            <th scope="col">Site</th>
+            <th scope="col">Created at</th>
+            <th scope="col">Result</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for testResult in resultSiteTests %}
+            <tr>
+                <td>{{ testResult.site }}</td>
+                <td>{{ testResult.createdAt |date }}</td>
+                <td>{{ testResult.result }}</td>
+                <td>{{ testResult.details }}</td>
+                <td>
+{#                    <a class="advance-test" data-id="{{ 'id': testResult.siteTest.id }}">Run Test</a> #}
+                    {# <a class="advance-test" href="{{ path ('site_advance_test_manual', {'id': testResult.siteTest.id})  }}">Run Test</a> #}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

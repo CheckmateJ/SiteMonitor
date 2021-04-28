@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SiteController extends AbstractController
 {
-
     /**
      * @Route("/site", name="site")
      */
@@ -38,8 +37,7 @@ class SiteController extends AbstractController
             $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
         }
 
-        $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $site], ['id' => 'DESC'], 10);
-
+        $siteId = $site->getId();
         $form = $this->createForm(SiteType::class, $site, [
             'is_edit' => ($site->getId() !== null),
         ]);
@@ -54,13 +52,11 @@ class SiteController extends AbstractController
             }
 
             $em->flush();
-            return $this->redirectToRoute('site');
-
         }
 
         return $this->render('site/edit.html.twig', [
             'form' => $form->createView(),
-            'siteCheck' => $siteCheck
+            'siteId' => $siteId
         ]);
     }
 
@@ -77,6 +73,26 @@ class SiteController extends AbstractController
         $em->remove($entry);
         $em->flush();
         return $this->redirectToRoute('site');
+    }
+
+    /**
+     * @Route("/site/checks/{id}", name="site_checks")
+     * @Route("/site/checks", name="site_checks_empty")
+     */
+    public function siteChecks($id = null)
+    {
+        if($id != null) {
+            $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
+            $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $site], ['id' => 'DESC'], 10);
+            $siteId = $site->getId();
+
+            return $this->render('site/checks.html.twig', [
+                'id' => $siteId,
+                'siteCheck' => $siteCheck,
+            ]);
+        }
+        return $this->redirectToRoute('site');
+
     }
 
 
