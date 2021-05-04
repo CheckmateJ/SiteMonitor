@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include '/nav/tabs.html.twig' with {'id': siteId} %}
+    {% if siteId is not null %}
+        {% include '/nav/tabs.html.twig' with {'id': siteId} %}
+    {% endif %}
 
     {{ form_start(form) }}
     {{ form_label(form.domainName) }}
@@ -13,4 +15,5 @@
     {{ form_label(form.frequency) }}
     {{ form_widget(form.frequency) }}
     {{ form_end(form) }}
+
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SiteTestRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SiteTest
 {
-    const Type = ['Keyword', 'Header'];
+    const Type = ['Keyword', 'Header', 'requiredTexts'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -43,6 +45,25 @@ class SiteTest
      * @ORM\Column(type="integer")
      */
     private $frequency;
+
+    /**
+     * @ORM\OneToMany (targetEntity=SiteTestResults::class, mappedBy="siteTest")
+     *
+     */
+    private $testCheckResult;
+
+    public function __construct()
+    {
+        $this->testCheckResult = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|SiteTestResults[]
+     */
+    public function getTestCheckResult(): Collection
+    {
+        return $this->testCheckResult;
+    }
 
     public function getId(): ?int
     {

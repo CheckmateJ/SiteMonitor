@@ -3,7 +3,8 @@
 {% block title %}Hello SiteTestController!{% endblock %}
 
 {% block body %}
-    {% include '/nav/tabs.html.twig' with {'id': ''} %}
+
+    {% include '/nav/tabs.html.twig' with {'id': id} %}
     </br>
     <a href="{{ path('site_new_advance_test') }}" class="btn btn-primary">Create new advance test</a>
     </br>
@@ -14,24 +15,23 @@
             <th scope="col">Configuration</th>
             <th scope="col">Type</th>
             <th scope="col">Id</th>
-            <th scope="col">Action</th>
+            <th scope="col" class="tb-action">Action</th>
         </tr>
         </thead>
         <tbody>
-
         {% for test in siteTests %}
             <tr>
                 <td>{{ test.site }}</td>
                 <td>{{ test.configuration |json_encode }}</td>
                 <td>{{ test.type }}</td>
                 <td>{{ test.id }}</td>
-                <td><a href="{{ path ('site_edit_advance_test', {'id': test.id}) }}">Edit</a>
-                     <button class="advance-test" id="advance-test-id" data-id="{{ test.id }}">Run Test</button>
-{#                     <a class="advance-test" href="{{ path ('site_advance_test_manual', {'id': test.id})  }}">Run Test</a>#}
+                <td><a class="btn btn-warning" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}">Edit</a>
+                    <button class="run-advance-test btn btn-warning" data-bs-toggle="modal" data-bs-target="#resultTestModal"
+                            id="advance-test-id" data-id="{{ test.id }}">Run Test
+                    </button>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <div id="result"></div>
 {% endblock %}

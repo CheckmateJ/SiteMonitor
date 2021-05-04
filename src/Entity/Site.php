@@ -6,6 +6,7 @@ use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -164,12 +165,18 @@ class Site
 
     public function getRecentResponseTime()
     {
-        // filtrowanie zeby byly sitechecki z ostatnich 24 godzin ->filter
-        $result = $this->getSiteCheck()->map(function (SiteChecks $siteCheck) {
+        $result = $this->getSiteCheck()->filter(function (SiteChecks $siteChecks) {
+
+            if ($siteChecks->getCreatedAt() > new \DateTime('last day')) {
+                return $siteChecks->getCreatedAt();
+            }
+        })->map(function (SiteChecks $siteCheck) {
+            dump($siteCheck->getCreatedAt());
             $now = new \DateTime();
-            return [$now->diff($siteCheck->getCreatedAt())->h*60+$now->diff($siteCheck->getCreatedAt())->i, $siteCheck->getTimeServer()];
+            return [$now->diff($siteCheck->getCreatedAt())->h * 60 + $now->diff($siteCheck->getCreatedAt())->i, $siteCheck->getTimeServer()];
         });
-        dump($result);
+
+//        dump($result);
         return $result;
     }
 

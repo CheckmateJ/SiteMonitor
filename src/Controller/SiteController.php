@@ -81,7 +81,7 @@ class SiteController extends AbstractController
      */
     public function siteChecks($id = null)
     {
-        if($id != null) {
+        if ($id != null) {
             $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
             $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $site], ['id' => 'DESC'], 10);
             $siteId = $site->getId();

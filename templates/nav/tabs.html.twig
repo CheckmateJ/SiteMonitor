@@ -1,11 +1,13 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="{{ path('site_edit', { id }) }}">Form </a>
+        <a class="{% if app.request.pathInfo == "/site/edit/"~id %}nav-link active {% else %}nav-link {% endif %}" aria-current="page" href="{{ path('site_edit', { id }) }}">Form </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="{{ path('site_checks', {id}) }}">Checks </a>
+        <a class="{% if app.request.pathInfo == "/site/checks/"~id %}nav-link active {% else %}nav-link {% endif %}"
+           href="{{ path('site_checks', {id}) }}">Checks </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="{{ path('site_advance_test', {id}) }}">Advanced Test</a>
+        <a class="{% if app.request.pathInfo == "/site/advance/test/"~id %}nav-link active {% else %}nav-link {% endif %}"
+           href="{{ path('site_advance_test', {id}) }}">Advanced Test</a>
     </li>
 </ul>

@@ -4,7 +4,6 @@
 namespace App\SiteTestEngine;
 
 
-use App\Command\SiteCheckCommand;
 use App\Entity\SiteTest;
 use App\Entity\SiteTestResults;
 use Psr\Http\Message\ResponseInterface;

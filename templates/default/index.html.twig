@@ -21,8 +21,8 @@
                                 {% endif %}
                             {% endif %}
                             <canvas data-id="{{ site.id }}" class="recentResponseTime"
-                                 data-points='{{ site.getRecentResponseTime().toArray|json_encode }}'></canvas>
-{#                                 data-points="{{ site.getSiteCheck()|map(p=>"#{p.createdAt.format('Y-m-d H:i')}|#{p.timeServer}")|join(', ') }}"></canvas>#}
+                                 data-points='{{ site.getRecentResponseTime().getValues()|json_encode }}'></canvas>
+{#                                 data-points="{{ site.getSiteCheck()|map(p=>"#{p.createdAt.format('Y-m-d H:i')}|# {p.timeServer}")|join(', ') }}"></canvas>#}
 {#                            {{ dump(site.timeCheckFromTheLastTwentyFourHour()[0]) }}#}
 
                         </div>

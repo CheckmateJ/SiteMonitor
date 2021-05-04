@@ -89,6 +89,7 @@ class SiteCheckCommand extends Command
         }
     }
 
+
     public function advanceSiteTest(Psr7\Response $response, Site $site)
     {
         $em = $this->entityManager;
@@ -96,6 +97,10 @@ class SiteCheckCommand extends Command
 
         foreach ($siteTest as $test) {
             try {
+                $testCheck = $test->getTestCheckResult()->last();
+                if ($testCheck !== false && $testCheck->getCreatedAt() > new \DateTime($test->getFrequency() . " minutes ago")) {
+                    continue;
+                }
                 $siteTestResults = $this->siteTestProcesseor->run($test, $response);
                 $siteTestResults->setSite($site);
                 $siteTestResults->setSiteTest($test);
@@ -119,8 +124,7 @@ class SiteCheckCommand extends Command
         foreach ($sites as $site) {
 
             $sitesCheck = $site->getSiteCheck()->last();
-
-            if (($site->getStatus() != 1) || $sitesCheck && $sitesCheck->getCreatedAt() > new \DateTime($site->getFrequency() . " minutes ago")) {
+            if (($site->getStatus() != 1) || ($sitesCheck && $sitesCheck->getCreatedAt() > new \DateTime($site->getFrequency() . " minutes ago"))) {
                 continue;
             }
             $this->testSite($site);

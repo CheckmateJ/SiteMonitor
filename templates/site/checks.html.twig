@@ -6,6 +6,7 @@
         <table class="table">
             <thead>
             <tr>
+                <th>Id</th>
                 <th>Domain Name</th>
                 <th>Status</th>
                 <th>Created at</th>
@@ -14,6 +15,7 @@
             <tbody>
             {% for site in siteCheck %}
                 <tr>
+                    <td>{{ site.id }}</td>
                     <td>{{ site.site }}</td>
                     <td>{{ site.statusCode }}</td>
                     <td>{{ site.createdAt|date }}</td>

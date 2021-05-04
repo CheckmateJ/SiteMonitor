@@ -18,16 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class SiteTestController extends AbstractController
 {
     /**
-     * @Route("/site/advance/test", name="site_advance_test", methods={"GET"})
+     * @Route("/site/advance/test/{id}", name="site_advance_test", methods={"GET"})
      */
-    public function siteTest(): Response
+    public function siteTest($id): Response
     {
-
-        $siteTests = $this->getDoctrine()->getRepository(SiteTest::class)->findAll();
-
+        $siteTests = $this->getDoctrine()->getRepository(SiteTest::class)->findBy(['site' => $id]);
         return $this->render('site_test/index.html.twig', [
             'siteTests' => $siteTests,
+            'id' => $id
         ]);
+
     }
 
     /**
@@ -40,7 +40,7 @@ class SiteTestController extends AbstractController
         if ($id != null) {
             $siteTest = $this->getDoctrine()->getRepository(SiteTest::class)->find($id);
         }
-        $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $siteTest]);
+        $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $siteTest], ['id' => 'DESC'], 10);
 
         $form = $this->createForm(SiteTestType::class, $siteTest, [
             'is_edit' => ($siteTest->getId() !== null),
@@ -55,9 +55,11 @@ class SiteTestController extends AbstractController
             }
             $em->flush();
         }
-        return $this->render('Test.html.twig', [
+
+        return $this->render('site_test/Test.html.twig', [
             'form' => $form->createView(),
             'resultSiteTests' => $resultSiteTests,
+            'id' => $siteTest->getSite()->getId()
         ]);
     }
 
@@ -67,9 +69,12 @@ class SiteTestController extends AbstractController
     public function runSiteTest(Request $request, $id, SiteTestProcessor $siteTestProcessor)
     {
         $siteTest = $this->getDoctrine()->getRepository(SiteTest::class)->find($id);
-        $response = $siteTestProcessor->getResponseForSite($siteTest->getSite());
-        $result = $siteTestProcessor->run($siteTest, $response);
-
+        try {
+            $response = $siteTestProcessor->getResponseForSite($siteTest->getSite());
+            $result = $siteTestProcessor->run($siteTest, $response);
+        } catch (\Exception $e) {
+            return $this->json($e->getMessage());
+        }
         return new JsonResponse(['status' => $result->getResult()]);
     }
 }
