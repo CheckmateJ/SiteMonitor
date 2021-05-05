@@ -5,8 +5,8 @@
     <div class="password-changing">
     {{ form_start(form) }}
     {{ form_label(form.email) }}
-    {{ form_widget(form.email) }}
-    {{ form_widget(form.plainPassword) }}
+    {{ form_widget(form.email, {'attr':{'class': 'email-input'}}) }}
+    {{ form_widget(form.plainPassword, {'attr':{'class': 'password-input'}}) }}
     <a href="{{ path('site') }}" class="btn btn-warning btn-back btn-form">Back</a>
     {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
     {{ form_end(form) }}

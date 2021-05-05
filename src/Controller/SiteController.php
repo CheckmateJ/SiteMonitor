@@ -2,15 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\NotificationChannel;
 use App\Entity\Site;
 use App\Entity\SiteChecks;
 use App\Entity\User;
 use App\Form\SiteEditType;
 use App\Form\SiteType;
+use http\Message\Body;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Email;
 
 class SiteController extends AbstractController
 {
@@ -37,9 +41,11 @@ class SiteController extends AbstractController
             $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
         }
 
+        $user = $this->getUser();
         $siteId = $site->getId();
         $form = $this->createForm(SiteType::class, $site, [
             'is_edit' => ($site->getId() !== null),
+            'user_id' => $user
         ]);
 
         $form->handleRequest($request);
@@ -94,6 +100,5 @@ class SiteController extends AbstractController
         return $this->redirectToRoute('site');
 
     }
-
 
 }

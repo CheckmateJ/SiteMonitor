@@ -48,9 +48,15 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=NotificationChannel::class, mappedBy="user")
+     */
+    private $notificationChannels;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
+        $this->notificationChannels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,5 +184,35 @@ class User implements UserInterface
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @return Collection|NotificationChannel[]
+     */
+    public function getNotificationChannels(): Collection
+    {
+        return $this->notificationChannels;
+    }
+
+    public function addNotificationChannel(NotificationChannel $notificationChannel): self
+    {
+        if (!$this->notificationChannels->contains($notificationChannel)) {
+            $this->notificationChannels[] = $notificationChannel;
+            $notificationChannel->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationChannel(NotificationChannel $notificationChannel): self
+    {
+        if ($this->notificationChannels->removeElement($notificationChannel)) {
+            // set the owning side to null (unless already changed)
+            if ($notificationChannel->getUser() === $this) {
+                $notificationChannel->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

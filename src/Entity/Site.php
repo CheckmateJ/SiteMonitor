@@ -68,6 +68,16 @@ class Site
      */
     private $siteCheck;
 
+    /**
+     * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="site")
+     */
+    private $notificationLogs;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=NotificationChannel::class, inversedBy="sites")
+     */
+    private $notificationChannels;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -148,6 +158,8 @@ class Site
     public function __construct()
     {
         $this->siteCheck = new ArrayCollection();
+        $this->notificationLogs = new ArrayCollection();
+        $this->notificationChannels = new ArrayCollection();
     }
 
     /**
@@ -187,6 +199,60 @@ class Site
         });
 
         return $result;
+    }
+
+    /**
+     * @return Collection|NotificationLog[]
+     */
+    public function getNotificationLogs(): Collection
+    {
+        return $this->notificationLogs;
+    }
+
+    public function addNotificationLog(NotificationLog $notificationLog): self
+    {
+        if (!$this->notificationLogs->contains($notificationLog)) {
+            $this->notificationLogs[] = $notificationLog;
+            $notificationLog->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationLog(NotificationLog $notificationLog): self
+    {
+        if ($this->notificationLogs->removeElement($notificationLog)) {
+            // set the owning side to null (unless already changed)
+            if ($notificationLog->getSite() === $this) {
+                $notificationLog->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NotificationChannel[]
+     */
+    public function getNotificationChannels(): Collection
+    {
+        return $this->notificationChannels;
+    }
+
+    public function addNotificationChannel(NotificationChannel $notificationChannel): self
+    {
+        if (!$this->notificationChannels->contains($notificationChannel)) {
+            $this->notificationChannels[] = $notificationChannel;
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationChannel(NotificationChannel $notificationChannel): self
+    {
+        $this->notificationChannels->removeElement($notificationChannel);
+
+        return $this;
     }
 
 }
