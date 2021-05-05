@@ -1,10 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form(form) }}
-    <a href="{{ path('site_advance_test', {'id': id}) }}" class="btn btn-primary">Back</a>
-
-    <caption>Result of tests</caption>
+    <div class="form-group">
+        {{ form_start(form) }}
+        {{ form_label(form.url) }}
+        {{ form_widget(form.url) }}
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
+        {{ form_label(form.configuration) }}
+        {{ form_widget(form.configuration) }}
+        {{ form_label(form.frequency) }}
+        {{ form_widget(form.frequency) }}
+        {{ form_label(form.site) }}
+        {{ form_widget(form.site) }}
+        {% if id is not null %}
+        <a href="{{ path('site_advance_test', {'id': id}) }}" class="btn btn-warning btn-back btn-form">Back</a>
+        {% endif %}
+        {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
+        {{ form_end(form) }}
+    </div>
     <table class="table ">
         <thead>
         <tr>

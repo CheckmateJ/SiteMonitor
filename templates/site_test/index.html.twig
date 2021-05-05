@@ -6,7 +6,7 @@
 
     {% include '/nav/tabs.html.twig' with {'id': id} %}
     </br>
-    <a href="{{ path('site_new_advance_test') }}" class="btn btn-primary">Create new advance test</a>
+    <a href="{{ path('site_new_advance_test')}}" class="btn btn-primary">Create new advance test</a>
     </br>
     <table class="table ">
         <thead>
@@ -25,8 +25,10 @@
                 <td>{{ test.configuration |json_encode }}</td>
                 <td>{{ test.type }}</td>
                 <td>{{ test.id }}</td>
-                <td><a class="btn btn-warning" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}">Edit</a>
-                    <button class="run-advance-test btn btn-warning" data-bs-toggle="modal" data-bs-target="#resultTestModal"
+                <td><a class="btn btn-danger" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}"><i
+                                class="bi bi-pencil-square"></i></a>
+                    <button class="run-advance-test btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#resultTestModal"
                             id="advance-test-id" data-id="{{ test.id }}">Run Test
                     </button>
                 </td>

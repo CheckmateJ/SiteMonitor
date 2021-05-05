@@ -3,11 +3,8 @@
 {% block title %}Hello SiteController!{% endblock %}
 
 {% block body %}
-
-
     <a href="{{ path('site_new') }}" class="btn btn-primary">Create new </a>
-
-    <table class="table">
+    <table class="table" id="table-site">
         <thead>
         <tr>
             <th>Id</th>
@@ -27,8 +24,10 @@
                     <td>Disabled</td>
                 {% endif %}
                 <td><a onclick="return confirm('Are you sure to delete this row?')" data-m
-                       href="{{ path('site_delete', {'id': site.id}) }}">Delete</a> || <a
-                            href="{{ path('site_edit', {'id': site.id}) }}">Edit</a></td>
+                       href="{{ path('site_delete', {'id': site.id}) }}" class="btn btn-danger"><i
+                                class="bi bi-trash"></i></a>
+                    <a href="{{ path('site_edit', {'id': site.id}) }}" class="btn btn-dark"><i
+                                class="bi bi-pencil-square"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>

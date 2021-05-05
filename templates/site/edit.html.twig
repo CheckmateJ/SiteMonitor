@@ -14,6 +14,8 @@
     {{ form_widget(form.status) }}
     {{ form_label(form.frequency) }}
     {{ form_widget(form.frequency) }}
+    <a href="{{ path('site') }}" class="btn btn-warning btn-back btn-form">Back</a>
+    {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
     {{ form_end(form) }}
 
 {% endblock %}

@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('dashboard', './assets/components/dashboard.js')
     .addEntry('testRun', './assets/components/testRun.js')
+    .addEntry('pagination', './assets/components/pagination.js')
 
     .autoProvidejQuery()
 

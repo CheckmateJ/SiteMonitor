@@ -3,24 +3,24 @@
 {% block body %}
 
     {% include '/nav/tabs.html.twig' with {'id': id} %}
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Domain Name</th>
+            <th>Status</th>
+            <th>Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for site in siteCheck %}
             <tr>
-                <th>Id</th>
-                <th>Domain Name</th>
-                <th>Status</th>
-                <th>Created at</th>
+                <td>{{ site.id }}</td>
+                <td>{{ site.site }}</td>
+                <td>{{ site.statusCode }}</td>
+                <td>{{ site.createdAt|date }}</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for site in siteCheck %}
-                <tr>
-                    <td>{{ site.id }}</td>
-                    <td>{{ site.site }}</td>
-                    <td>{{ site.statusCode }}</td>
-                    <td>{{ site.createdAt|date }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

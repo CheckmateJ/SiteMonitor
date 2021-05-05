@@ -39,6 +39,7 @@ class SiteTestController extends AbstractController
         $siteTest = new SiteTest();
         if ($id != null) {
             $siteTest = $this->getDoctrine()->getRepository(SiteTest::class)->find($id);
+            $id = $siteTest->getSite()->getId();
         }
         $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $siteTest], ['id' => 'DESC'], 10);
 
@@ -59,7 +60,7 @@ class SiteTestController extends AbstractController
         return $this->render('site_test/Test.html.twig', [
             'form' => $form->createView(),
             'resultSiteTests' => $resultSiteTests,
-            'id' => $siteTest->getSite()->getId()
+            'id' => $id
         ]);
     }
 
