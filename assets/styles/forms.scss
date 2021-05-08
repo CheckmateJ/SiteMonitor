@@ -9,9 +9,15 @@
 .col-form-label{
     width: 246px;
 }
-.password-input{
+.text-input{
     width: 300px;
 }
-.email-input{
+.text-input{
     width: 246px;
+}
+.form-notification{
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%,-50%);
 }

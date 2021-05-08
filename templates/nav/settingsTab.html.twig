@@ -1,0 +1,11 @@
+<ul class="nav flex-column settings-tabs">
+    <li class="nav-item">
+        <a class="nav-link " href="{{ path('user_settings_password_change', {'id' : app.user.id}) }}">Profile Information</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('site_notification_channel') }}">Notification channels</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('site_new_notification_channel') }}">New Channel</a>
+    </li>
+</ul>

@@ -25,13 +25,11 @@ class SiteType extends AbstractType
             ->add('frequency', ChoiceType::class, [
                 'choices' => array_combine(Site::frequency, Site::frequency)
             ])
-            ->add('user', EntityType::class, [
-                'class' => 'App\Entity\User',
-                'choice_label' => 'email'])
             ->add('notificationChannels', EntityType::class, [
                 'class' => 'App\Entity\NotificationChannel',
                 'multiple' => true,
-                'choices' => $options['user_id']->getNotificationChannels()->toArray()
+                'choices' => $options['user_id']->getNotificationChannels()->toArray(),
+                'required' => false
             ])
             ->add('save', SubmitType::class);
     }

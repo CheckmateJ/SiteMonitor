@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=SiteRepository::class)
- * @UniqueEntity("domainName")
+ *
  */
 class Site
 {
@@ -72,6 +72,11 @@ class Site
      * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="site")
      */
     private $notificationLogs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SiteTestResults::class, mappedBy="site")
+     */
+    private $siteTestResult;
 
     /**
      * @ORM\ManyToMany(targetEntity=NotificationChannel::class, inversedBy="sites")
@@ -158,6 +163,7 @@ class Site
     public function __construct()
     {
         $this->siteCheck = new ArrayCollection();
+        $this->siteTestResult = new ArrayCollection();
         $this->notificationLogs = new ArrayCollection();
         $this->notificationChannels = new ArrayCollection();
     }
@@ -168,6 +174,13 @@ class Site
     public function getSiteCheck(): Collection
     {
         return $this->siteCheck;
+    }
+    /**
+     * @return Collection|SiteTestResults[]
+     */
+    public function getSiteTestResult(): Collection
+    {
+        return $this->siteTestResult;
     }
 
     public function __toString()
@@ -188,7 +201,6 @@ class Site
             return [$now->diff($siteCheck->getCreatedAt())->h * 60 + $now->diff($siteCheck->getCreatedAt())->i, $siteCheck->getTimeServer()];
         });
 
-//        dump($result);
         return $result;
     }
 

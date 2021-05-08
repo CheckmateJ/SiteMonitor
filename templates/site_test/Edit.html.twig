@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <div class="form-group">
         {{ form_start(form) }}
         {{ form_label(form.url) }}
@@ -13,9 +14,7 @@
         {{ form_widget(form.frequency) }}
         {{ form_label(form.site) }}
         {{ form_widget(form.site) }}
-        {% if id is not null %}
-        <a href="{{ path('site_advance_test', {'id': id}) }}" class="btn btn-warning btn-back btn-form">Back</a>
-        {% endif %}
+        <a href="{{ path('site_advance_test', {'id': siteId}) }}" class="btn btn-warning btn-back btn-form">Back</a>
         {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
         {{ form_end(form) }}
     </div>

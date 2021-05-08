@@ -15,30 +15,29 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserSettingsController extends AbstractController
 {
     /**
-     * @Route("/site/user/settings/{id}", name="user_settings")
+     * @Route("/site/user/settings/passwords_change/{id}", name="user_settings_password_change")
      */
-    public function index(Request $request,UserPasswordEncoderInterface $passwordEncoder,$id): Response
+    public function passwordChange(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id): Response
     {
-
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
 
-        $form = $this->createForm(ChangePasswordFormType::class,$user);
+        $form = $this->createForm(ChangePasswordFormType::class, $user);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            if ($form->get('plainPassword')->getData()) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            }
             $em->flush();
         }
 
-
-
-        return $this->render('user_settings/index.html.twig',[
-        'form'=>$form->createView()
+        return $this->render('user_settings/passwordChange.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

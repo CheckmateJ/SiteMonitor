@@ -19,10 +19,6 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $siteChecks = $this->getDoctrine()->getRepository(SiteChecks::class)->findAll();
-//        foreach ($siteChecks as $siteCheck){
-//            $arrSiteCheck[] = $siteCheck->getTimeServer();
-//    }
-
 
         $allSites = $this->getDoctrine()->getRepository(Site::class)->findAll();
 

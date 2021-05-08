@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\NotificationChannel;
+use App\Entity\NotificationLog;
 use App\Entity\Site;
 use App\Entity\SiteChecks;
+use App\Entity\SiteTest;
 use App\Entity\User;
 use App\Form\SiteEditType;
 use App\Form\SiteType;
@@ -42,6 +44,7 @@ class SiteController extends AbstractController
         }
 
         $user = $this->getUser();
+        $siteForUser = $this->getDoctrine()->getRepository(Site::class)->findBy(['user' => $user->getId()]);
         $siteId = $site->getId();
         $form = $this->createForm(SiteType::class, $site, [
             'is_edit' => ($site->getId() !== null),
@@ -49,15 +52,20 @@ class SiteController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
 
-            if ($id == null) {
-                $em->persist($site);
+            if ((!in_array($site->getDomainName(), $siteForUser) && $id == null) || $id != null) {
+
+                $em = $this->getDoctrine()->getManager();
+                $site->setUser($this->getUser());
+                if ($id == null) {
+                    $em->persist($site);
+                }
+                $em->flush();
             }
 
-            $em->flush();
+
+            return $this->redirectToRoute('site');
         }
 
         return $this->render('site/edit.html.twig', [
@@ -72,7 +80,6 @@ class SiteController extends AbstractController
      */
     public function delete($id)
     {
-
         $em = $this->getDoctrine()->getManager();
         $entry = $em->getRepository(Site::class)->find($id);
 
@@ -88,12 +95,10 @@ class SiteController extends AbstractController
     public function siteChecks($id = null)
     {
         if ($id != null) {
-            $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
-            $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $site], ['id' => 'DESC'], 10);
-            $siteId = $site->getId();
+            $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $id], ['id' => 'DESC'], 10);
 
             return $this->render('site/checks.html.twig', [
-                'id' => $siteId,
+                'id' => $id,
                 'siteCheck' => $siteCheck,
             ]);
         }

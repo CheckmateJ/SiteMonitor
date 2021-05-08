@@ -6,9 +6,7 @@ use App\Entity\Site;
 use App\Entity\SiteTest;
 use App\Entity\SiteTestResults;
 use App\Form\SiteTestType;
-use App\Repository\SiteTestRepository;
 use App\SiteTestEngine\SiteTestProcessor;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,45 +20,53 @@ class SiteTestController extends AbstractController
      */
     public function siteTest($id): Response
     {
-        $siteTests = $this->getDoctrine()->getRepository(SiteTest::class)->findBy(['site' => $id]);
+        $siteTests = $id ? $this->getDoctrine()->getRepository(SiteTest::class)->findBy(['site' => $id]) : null;
+
         return $this->render('site_test/index.html.twig', [
             'siteTests' => $siteTests,
-            'id' => $id
+            'id' => $id,
         ]);
-
     }
 
     /**
-     * @Route("/site/new/advance/test", name="site_new_advance_test")
+     * @Route("/site/new/advance/test/{slug}", name="site_new_advance_test")
      * @Route("/site/edit/advance/test/{id}", name="site_edit_advance_test")
      */
-    public function newSiteTest(Request $request, $id = null)
+    public function newSiteTest(Request $request, $id = null, $slug = null)
     {
-        $siteTest = new SiteTest();
-        if ($id != null) {
-            $siteTest = $this->getDoctrine()->getRepository(SiteTest::class)->find($id);
-            $id = $siteTest->getSite()->getId();
-        }
-        $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $siteTest], ['id' => 'DESC'], 10);
 
-        $form = $this->createForm(SiteTestType::class, $siteTest, [
-            'is_edit' => ($siteTest->getId() !== null),
+        $siteTest = new SiteTest();
+        $site = $slug ? $this->getDoctrine()->getRepository(Site::class)->find($slug) : null;
+
+        $editSiteTest = $id ? $this->getDoctrine()->getRepository(SiteTest::class)->find($id) : null;
+        $siteId = $id ? $editSiteTest->getSite() : $site;
+
+        $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $editSiteTest], ['id' => 'DESC'], 10);
+
+        $form = $this->createForm(SiteTestType::class, $slug ? $siteTest : $editSiteTest, [
+            'is_edit' => ($slug ? $site->getId() !== null : $editSiteTest->getSite()->getId() !== null),
         ]);
+
+        $form->get('site')->setData($slug ? $site : $siteId);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
             if ($id == null) {
+                $siteTest->setSite($site);
                 $em->persist($siteTest);
             }
             $em->flush();
+
+            return $this->redirectToRoute('site_advance_test');
         }
 
-        return $this->render('site_test/Test.html.twig', [
+        return $this->render('site_test/Edit.html.twig', [
             'form' => $form->createView(),
             'resultSiteTests' => $resultSiteTests,
-            'id' => $id
+            'siteId' => $siteId->getId()
+
         ]);
     }
 

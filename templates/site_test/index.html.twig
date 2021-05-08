@@ -6,7 +6,7 @@
 
     {% include '/nav/tabs.html.twig' with {'id': id} %}
     </br>
-    <a href="{{ path('site_new_advance_test')}}" class="btn btn-primary">Create new advance test</a>
+    <a href="{{ path('site_new_advance_test', {'slug' : id}) }}" class="btn btn-primary">Create new advance test</a>
     </br>
     <table class="table ">
         <thead>
@@ -19,21 +19,23 @@
         </tr>
         </thead>
         <tbody>
-        {% for test in siteTests %}
-            <tr>
-                <td>{{ test.site }}</td>
-                <td>{{ test.configuration |json_encode }}</td>
-                <td>{{ test.type }}</td>
-                <td>{{ test.id }}</td>
-                <td><a class="btn btn-danger" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}"><i
-                                class="bi bi-pencil-square"></i></a>
-                    <button class="run-advance-test btn btn-success" data-bs-toggle="modal"
-                            data-bs-target="#resultTestModal"
-                            id="advance-test-id" data-id="{{ test.id }}">Run Test
-                    </button>
-                </td>
-            </tr>
-        {% endfor %}
+        {% if siteTests is not null %}
+            {% for test in siteTests %}
+                <tr>
+                    <td>{{ test.site }}</td>
+                    <td>{{ test.configuration |json_encode }}</td>
+                    <td>{{ test.type }}</td>
+                    <td>{{ test.id }}</td>
+                    <td><a class="btn btn-danger" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}"><i
+                                    class="bi bi-pencil-square"></i></a>
+                        <button class="run-advance-test btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#resultTestModal"
+                                id="advance-test-id" data-id="{{ test.id }}">Run Test
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 {% endblock %}

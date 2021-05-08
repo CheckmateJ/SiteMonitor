@@ -37,17 +37,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('site') }}">Site</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('site_new_advance_test') }}">Advance Site</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('site_new_notification_channel') }}">Notification channel</a>
-                </li>
             </ul>
             {% if app.user %}
                 <div class="mb-3 login-group">
                     {{ app.user.username }} <a href="{{ path('app_logout') }}" class="logout-link"><i class="bi bi-box-arrow-right"></i></a>
-                    <a href="{{ path('user_settings', {'id': app.user.id}) }}"> <i class="bi bi-gear"></i> </a>
+                    <a href="{{ path('user_settings_password_change', {'id': app.user.id}) }}"> <i class="bi bi-gear"></i> </a>
                 </div>
             {% else %}
                 <form class="d-flex">
