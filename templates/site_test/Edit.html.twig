@@ -4,21 +4,27 @@
 
     <div class="form-group">
         {{ form_start(form) }}
+        {{ form_label(form.testName) }}
+        {{ form_widget(form.testName) }}
         {{ form_label(form.url) }}
         {{ form_widget(form.url) }}
         {{ form_label(form.type) }}
-        {{ form_widget(form.type) }}
-        {{ form_label(form.configuration) }}
-        {{ form_widget(form.configuration) }}
+        <div class="type">
+            {{ form_widget(form.type) }}
+        </div>
+        <div id="type-configuration"></div>
+
+        <div id="config-input">
+            {{ form_widget(form.configuration) }}
+        </div>
         {{ form_label(form.frequency) }}
         {{ form_widget(form.frequency) }}
-        {{ form_label(form.site) }}
-        {{ form_widget(form.site) }}
         <a href="{{ path('site_advance_test', {'id': siteId}) }}" class="btn btn-warning btn-back btn-form">Back</a>
         {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
         {{ form_end(form) }}
+
     </div>
-    <table class="table ">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">Id</th>

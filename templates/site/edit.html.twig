@@ -3,17 +3,26 @@
 {% block body %}
     {% if siteId is not null %}
         {% include '/nav/tabs.html.twig' with {'id': siteId} %}
+    {% else %}
+        <h2 class="h2 text-center"><b>New Site</b></h2>
     {% endif %}
-
     {{ form_start(form) }}
     {{ form_label(form.domainName) }}
     {{ form_widget(form.domainName) }}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
     {{ form_label(form.status) }}
     {{ form_widget(form.status) }}
     {{ form_label(form.frequency) }}
     {{ form_widget(form.frequency) }}
+    {{ form_label(form.notificationChannels) }}
+    {{ form_widget(form.notificationChannels) }}
     <a href="{{ path('site') }}" class="btn btn-warning btn-back btn-form">Back</a>
     {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
     {{ form_end(form) }}
+
 
 {% endblock %}

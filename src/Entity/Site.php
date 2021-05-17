@@ -17,8 +17,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Site
 {
-    const frequency = [1, 5, 10, 15, 30, 60];
-    const status = [1, 2];
+    const frequencyKey = ["1m","5m","10m","15m","30m","1h","2h","4h","8h","12h","24h"];
+    const frequencyValue = [1,5,10,15,30,60,120,240,480,720,1440];
+    const statusKey= ['Enabled', 'Disabled'];
+    const statusValue = [1,2];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -63,25 +65,30 @@ class Site
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany (targetEntity=SiteChecks::class, mappedBy="site")
+     * @ORM\OneToMany (targetEntity=SiteChecks::class, mappedBy="site", orphanRemoval=true)
      *
      */
     private $siteCheck;
 
     /**
-     * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="site")
+     * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="site", orphanRemoval=true)
      */
     private $notificationLogs;
 
     /**
-     * @ORM\OneToMany(targetEntity=SiteTestResults::class, mappedBy="site")
+     * @ORM\OneToMany(targetEntity=SiteTestResults::class, mappedBy="site", orphanRemoval=true)
      */
     private $siteTestResult;
 
     /**
-     * @ORM\ManyToMany(targetEntity=NotificationChannel::class, inversedBy="sites")
+     * @ORM\ManyToMany(targetEntity=NotificationChannel::class, inversedBy="sites", orphanRemoval=true)
      */
     private $notificationChannels;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SiteTest::class, mappedBy="site", orphanRemoval=true)
+     */
+    private $siteTest;
 
     public function getId(): ?int
     {
@@ -163,6 +170,7 @@ class Site
     public function __construct()
     {
         $this->siteCheck = new ArrayCollection();
+        $this->siteTest = new ArrayCollection();
         $this->siteTestResult = new ArrayCollection();
         $this->notificationLogs = new ArrayCollection();
         $this->notificationChannels = new ArrayCollection();
@@ -182,6 +190,13 @@ class Site
     {
         return $this->siteTestResult;
     }
+    /**
+     * @return Collection|SiteTest[]
+     */
+    public function getSiteTest(): Collection
+    {
+        return $this->siteTest;
+    }
 
     public function __toString()
     {
@@ -196,18 +211,8 @@ class Site
                 return $siteChecks->getCreatedAt();
             }
         })->map(function (SiteChecks $siteCheck) {
-            dump($siteCheck->getCreatedAt());
             $now = new \DateTime();
             return [$now->diff($siteCheck->getCreatedAt())->h * 60 + $now->diff($siteCheck->getCreatedAt())->i, $siteCheck->getTimeServer()];
-        });
-
-        return $result;
-    }
-
-    public function getTimeCheckFromTheLastTwentyFourHour()
-    {
-        $result = $this->getSiteCheck()->map(function (SiteChecks $siteCheck) {
-            return $siteCheck->getCreatedAt();
         });
 
         return $result;

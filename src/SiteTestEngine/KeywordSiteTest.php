@@ -14,11 +14,14 @@ class KeywordSiteTest implements SiteTestInterface
     public function run(SiteTest $siteTest, ResponseInterface $response): SiteTestResults
     {
         $siteTestResults = new SiteTestResults();
+        $contents = $response->getBody()->getContents();
 
-        if (str_contains($response->getBody()->getContents(), $siteTest->getConfiguration()['keyword'])) {
-            $siteTestResults->setResult(1);
-        } else {
-            $siteTestResults->setResult(0);
+        foreach ($siteTest->getConfiguration()['Keyword'] as $value) {
+            if (str_contains($contents, $value)) {
+                $siteTestResults->setResult(1);
+            } else {
+                $siteTestResults->setResult(0);
+            }
         }
 
         return $siteTestResults;

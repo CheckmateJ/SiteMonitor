@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SiteTest
 {
-    const Type = ['Keyword', 'Header', 'Selector Test', 'SslExpirationTest'];
+    const Type = ['Keyword', 'Header', 'Required Texts', 'Ssl Expiration Test', 'Schema Test'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -22,7 +22,7 @@ class SiteTest
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="sitesCheck")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $site;
 
@@ -48,9 +48,21 @@ class SiteTest
 
     /**
      * @ORM\OneToMany (targetEntity=SiteTestResults::class, mappedBy="siteTest")
-     *
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $testCheckResult;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $testName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="SiteTest")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $notificationLogs;
+
 
     public function __construct()
     {
@@ -106,7 +118,7 @@ class SiteTest
         return $this;
     }
 
-    public function getConfiguration(): ?array
+    public function getConfiguration()
     {
         return $this->configuration;
     }
@@ -128,5 +140,21 @@ class SiteTest
         $this->frequency = $frequency;
 
         return $this;
+    }
+
+    public function getTestName(): ?string
+    {
+        return $this->testName;
+    }
+
+    public function setTestName(?string $testName): self
+    {
+        $this->testName = $testName;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this->getConfiguration();
     }
 }

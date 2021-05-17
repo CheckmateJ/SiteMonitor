@@ -840,7 +840,6 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="251" parent="237" name="user_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="252" parent="237" name="type">
       <Position>3</Position>
@@ -870,6 +869,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <ColNames>user_id</ColNames>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <column id="258" parent="238" name="id">
       <Position>1</Position>
@@ -880,12 +880,10 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="259" parent="238" name="site_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="260" parent="238" name="notification_channel_id">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="261" parent="238" name="site_test_id">
       <Position>4</Position>
@@ -921,16 +919,19 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <ColNames>site_id</ColNames>
       <RefTableName>site</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <foreign-key id="269" parent="238" name="FK_ED15DF289870488">
       <ColNames>notification_channel_id</ColNames>
       <RefTableName>notification_channel</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <foreign-key id="270" parent="238" name="FK_ED15DF2E5F9E692">
       <ColNames>site_test_id</ColNames>
       <RefTableName>site_test</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <column id="271" parent="239" name="id">
       <Position>1</Position>
@@ -1038,7 +1039,6 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="291" parent="241" name="site_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="292" parent="241" name="created_at">
       <Position>3</Position>
@@ -1086,6 +1086,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <ColNames>site_id</ColNames>
       <RefTableName>site</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <column id="302" parent="242" name="site_id">
       <Position>1</Position>
@@ -1132,7 +1133,6 @@ notification_channel_id</ColNames>
     <column id="310" parent="243" name="site_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="311" parent="243" name="url">
       <Position>3</Position>
@@ -1166,6 +1166,7 @@ notification_channel_id</ColNames>
       <ColNames>site_id</ColNames>
       <RefTableName>site</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <column id="318" parent="244" name="id">
       <Position>1</Position>
@@ -1176,12 +1177,10 @@ notification_channel_id</ColNames>
     <column id="319" parent="244" name="site_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="320" parent="244" name="site_test_id">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="321" parent="244" name="created_at">
       <Position>4</Position>
@@ -1214,11 +1213,13 @@ notification_channel_id</ColNames>
       <ColNames>site_id</ColNames>
       <RefTableName>site</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <foreign-key id="328" parent="244" name="FK_8868AD6FE5F9E692">
       <ColNames>site_test_id</ColNames>
       <RefTableName>site_test</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <column id="329" parent="245" name="id">
       <Position>1</Position>

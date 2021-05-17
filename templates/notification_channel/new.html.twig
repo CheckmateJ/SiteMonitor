@@ -4,10 +4,15 @@
     {% include 'nav/settingsTab.html.twig' %}
     <div class="form-notification">
         {{ form_start(form) }}
+        {{ form_label(form.notificationName) }}
+        {{ form_widget(form.notificationName) }}
         {{ form_label(form.type) }}
         {{ form_widget(form.type, {'attr':{'class': 'text-input'}}) }}
         {{ form_label(form.destination) }}
         {{ form_widget(form.destination, {'attr':{'class': 'text-input'}}) }}
+        {{ form_label(form.defaultValue) }}
+        {{ form_widget(form.defaultValue) }}
+        <a href="{{ path('site_notification_channel') }}" class="btn btn-warning btn-back btn-form">Back</a>
         {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
         {{ form_end(form) }}
     </div>

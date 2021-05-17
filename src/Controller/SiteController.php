@@ -34,7 +34,6 @@ class SiteController extends AbstractController
     /**
      * @Route("/site/new", name="site_new")
      * @Route("/site/edit/{id}", name="site_edit")
-     *
      */
     public function edit(Request $request, $id = null)
     {
@@ -43,12 +42,17 @@ class SiteController extends AbstractController
             $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
         }
 
+        $siteName = $site->getDomainName();
+
+        $notificationChannel = $this->getDoctrine()->getRepository(NotificationChannel::class)->findBy(['defaultValue' => 1]);
+
         $user = $this->getUser();
         $siteForUser = $this->getDoctrine()->getRepository(Site::class)->findBy(['user' => $user->getId()]);
         $siteId = $site->getId();
         $form = $this->createForm(SiteType::class, $site, [
             'is_edit' => ($site->getId() !== null),
-            'user_id' => $user
+            'user_id' => $user,
+            'notificationChannel' => $notificationChannel
         ]);
 
         $form->handleRequest($request);
@@ -57,19 +61,20 @@ class SiteController extends AbstractController
             if ((!in_array($site->getDomainName(), $siteForUser) && $id == null) || $id != null) {
 
                 $em = $this->getDoctrine()->getManager();
-                $site->setUser($this->getUser());
+                $site->setUser($user);
                 if ($id == null) {
                     $em->persist($site);
                 }
                 $em->flush();
+                return $this->redirectToRoute('site');
             }
 
-
-            return $this->redirectToRoute('site');
+            $this->addFlash('error', 'This webpage already exist');
         }
 
         return $this->render('site/edit.html.twig', [
             'form' => $form->createView(),
+            'siteName' => $siteName,
             'siteId' => $siteId
         ]);
     }
@@ -96,10 +101,12 @@ class SiteController extends AbstractController
     {
         if ($id != null) {
             $siteCheck = $this->getDoctrine()->getRepository(SiteChecks::class)->findBy(['site' => $id], ['id' => 'DESC'], 10);
-
+            $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
+            $siteName = $site->getDomainName();
             return $this->render('site/checks.html.twig', [
                 'id' => $id,
                 'siteCheck' => $siteCheck,
+                'siteName' => $siteName
             ]);
         }
         return $this->redirectToRoute('site');

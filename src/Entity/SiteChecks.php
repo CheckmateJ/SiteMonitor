@@ -23,7 +23,7 @@ class SiteChecks
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="sitesCheck")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $site;
 

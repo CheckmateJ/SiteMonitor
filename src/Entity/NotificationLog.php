@@ -20,19 +20,19 @@ class NotificationLog
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="notificationLogs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $site;
 
     /**
      * @ORM\ManyToOne(targetEntity=NotificationChannel::class, inversedBy="notificationLogs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $notificationChannel;
 
     /**
-     * @ORM\ManyToOne(targetEntity=SiteTest::class)
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity=SiteTest::class, inversedBy="notificationLogs")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $siteTest;
 

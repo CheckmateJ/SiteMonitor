@@ -53,5 +53,11 @@ services:
                 # this is the only required option for the lifecycle listener tag
               event: 'postPersist'
 
+    App\EventListener\Slack:
+        tags:
+            - name: 'doctrine.event_listener'
+                # this is the only required option for the lifecycle listener tag
+              event: 'postPersist'
+
 
 

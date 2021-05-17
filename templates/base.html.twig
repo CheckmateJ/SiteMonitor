@@ -49,10 +49,9 @@
                             data-bs-target="#modal_Login">
                         Login
                     </button>
-                    <button type="button" class="btn btn-primary btn-nav" data-bs-toggle="modal"
-                            data-bs-target="#modal_Register">
+                    <a  href="{{ path('app_register') }}" type="button" class="btn btn-primary btn-nav">
                         Sign up
-                    </button>
+                    </a>
                 </form>
             {% endif %}
         </div>
@@ -60,7 +59,6 @@
 </nav>
 
 {% include '/modals/loginModal.html.twig' %}
-{% include '/modals/registerModal.html.twig' %}
 {% include '/modals/ResultOfTest.html.twig' %}
 <div class="container">
     {% block body %}

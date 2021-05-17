@@ -135,6 +135,9 @@
             "./config/packages/prod/jms_serializer.yaml"
         ]
     },
+    "justinrainbow/json-schema": {
+        "version": "5.2.10"
+    },
     "laminas/laminas-code": {
         "version": "4.2.0"
     },

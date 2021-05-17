@@ -16,13 +16,3 @@
   margin-top: 10%;
   width: 200px;
 }
-.notification-table{
-  width: 500px;
-  position: absolute;
-  left: 50%;
-  top: 35%;
-  transform: translate(-50%,-50%);
-  &.row-notification{
-    width: auto;
-  }
-}

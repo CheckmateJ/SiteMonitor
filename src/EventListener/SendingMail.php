@@ -25,11 +25,11 @@ class SendingMail
             return;
         }
 
+        if ($entity->getNotificationChannel()->getType() == 'email') {
         $date = $entity->getCreatedAt();
         $dateForm = $date->format('Y-m-d H:i:s');
 
         $email = (new Email())
-            ->from('123@gmail.com')
             ->to($entity->getNotificationChannel()->getDestination())
             ->subject('Page status')
             ->html('
@@ -41,5 +41,6 @@ class SendingMail
 			</html>');
 
         $this->mailer->send($email);
+        }
     }
 }

@@ -31,6 +31,7 @@ class SiteTestProcessor
             if($engine::getId() == $siteTest->getType()) {
                 return $engine->run($siteTest, $response);
             }
+            // zaden engine nie obsluguje testu o danym type
         }
 
         throw new \InvalidArgumentException();

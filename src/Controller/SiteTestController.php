@@ -21,10 +21,13 @@ class SiteTestController extends AbstractController
     public function siteTest($id): Response
     {
         $siteTests = $id ? $this->getDoctrine()->getRepository(SiteTest::class)->findBy(['site' => $id]) : null;
+        $site = $this->getDoctrine()->getRepository(Site::class)->find($id);
+        $siteName = $site->getDomainName();
 
         return $this->render('site_test/index.html.twig', [
             'siteTests' => $siteTests,
             'id' => $id,
+            'siteName'=> $siteName
         ]);
     }
 
@@ -34,7 +37,6 @@ class SiteTestController extends AbstractController
      */
     public function newSiteTest(Request $request, $id = null, $slug = null)
     {
-
         $siteTest = new SiteTest();
         $site = $slug ? $this->getDoctrine()->getRepository(Site::class)->find($slug) : null;
 
@@ -43,11 +45,7 @@ class SiteTestController extends AbstractController
 
         $resultSiteTests = $this->getDoctrine()->getRepository(SiteTestResults::class)->findBy(['siteTest' => $editSiteTest], ['id' => 'DESC'], 10);
 
-        $form = $this->createForm(SiteTestType::class, $slug ? $siteTest : $editSiteTest, [
-            'is_edit' => ($slug ? $site->getId() !== null : $editSiteTest->getSite()->getId() !== null),
-        ]);
-
-        $form->get('site')->setData($slug ? $site : $siteId);
+        $form = $this->createForm(SiteTestType::class, $slug ? $siteTest : $editSiteTest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,16 +54,19 @@ class SiteTestController extends AbstractController
             if ($id == null) {
                 $siteTest->setSite($site);
                 $em->persist($siteTest);
+            } else {
+                $editSiteTest->setSite($siteId);
             }
             $em->flush();
 
-            return $this->redirectToRoute('site_advance_test');
+            return $this->redirect($this->generateUrl('site_advance_test', $slug ? ['id' => $slug] : ['id' => $siteId->getId()]));
         }
 
         return $this->render('site_test/Edit.html.twig', [
             'form' => $form->createView(),
             'resultSiteTests' => $resultSiteTests,
-            'siteId' => $siteId->getId()
+            'siteId' => $siteId->getId(),
+            'id' => $id
 
         ]);
     }
@@ -83,5 +84,18 @@ class SiteTestController extends AbstractController
             return $this->json($e->getMessage());
         }
         return new JsonResponse(['status' => $result->getResult()]);
+    }
+
+    /**
+     * @Route("/site/test/delete/{id}/{slug}", name="site_advance_test_delete")
+     */
+    public function delete($id, $slug)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entry = $em->getRepository(SiteTest::class)->find($id);
+
+        $em->remove($entry);
+        $em->flush();
+        return $this->redirect($this->generateUrl('site_advance_test', ['id' => $slug]));
     }
 }

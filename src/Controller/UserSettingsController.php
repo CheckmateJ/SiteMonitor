@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\RegistrationFormType;
 use App\Form\UserType;
+use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,25 +20,29 @@ class UserSettingsController extends AbstractController
      */
     public function passwordChange(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if($this->getUser()->getId() == $id) {
+            $user = $this->getDoctrine()->getRepository(User::class)->find($id);
 
-        $form = $this->createForm(ChangePasswordFormType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            if ($form->get('plainPassword')->getData()) {
-                $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $user,
-                        $form->get('plainPassword')->getData()
-                    )
-                );
+            $form = $this->createForm(ChangePasswordFormType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                if ($form->get('plainPassword')->getData()) {
+                    $user->setPassword(
+                        $passwordEncoder->encodePassword(
+                            $user,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
+                }
+                $em->flush();
             }
-            $em->flush();
-        }
 
-        return $this->render('user_settings/passwordChange.html.twig', [
-            'form' => $form->createView()
-        ]);
+            return $this->render('user_settings/passwordChange.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }else{
+            throw new \Exception('Invalid id of user');
+        }
     }
 }

@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class NotificationChannel
 {
+    const type = ['email', 'slack'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -22,7 +23,7 @@ class NotificationChannel
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notificationChannels")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $user;
 
@@ -44,13 +45,25 @@ class NotificationChannel
 
     /**
      * @ORM\ManyToMany(targetEntity=Site::class, mappedBy="notificationChannels")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $sites;
 
     /**
      * @ORM\OneToMany(targetEntity=NotificationLog::class, mappedBy="NotificationChannel")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $notificationLogs;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultValue;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $notificationName;
 
     public function __construct()
     {
@@ -139,6 +152,33 @@ class NotificationChannel
 
     public function __toString()
     {
+        if($this->notificationName){
+            return $this->notificationName;
+        }
         return $this->getType().' - '.$this->getDestination();
+    }
+
+    public function getDefaultValue(): ?bool
+    {
+        return $this->defaultValue;
+    }
+
+    public function setDefaultValue(bool $defaultValue): self
+    {
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    public function getNotificationName(): ?string
+    {
+        return $this->notificationName;
+    }
+
+    public function setNotificationName(?string $notificationName): self
+    {
+        $this->notificationName = $notificationName;
+
+        return $this;
     }
 }

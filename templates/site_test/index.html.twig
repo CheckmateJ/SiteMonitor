@@ -4,14 +4,14 @@
 
 {% block body %}
 
-    {% include '/nav/tabs.html.twig' with {'id': id} %}
+    {% include '/nav/tabs.html.twig' %}
     </br>
     <a href="{{ path('site_new_advance_test', {'slug' : id}) }}" class="btn btn-primary">Create new advance test</a>
     </br>
-    <table class="table ">
+    <table class="table table-hover ">
         <thead>
         <tr>
-            <th scope="col">Site</th>
+            <th scope="col">Test Name</th>
             <th scope="col">Configuration</th>
             <th scope="col">Type</th>
             <th scope="col">Id</th>
@@ -22,11 +22,14 @@
         {% if siteTests is not null %}
             {% for test in siteTests %}
                 <tr>
-                    <td>{{ test.site }}</td>
+                    <td>{{ test.testName }}</td>
                     <td>{{ test.configuration |json_encode }}</td>
                     <td>{{ test.type }}</td>
                     <td>{{ test.id }}</td>
-                    <td><a class="btn btn-danger" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}"><i
+                    <td><a onclick="return confirm('Are you sure to delete this row?')" data-m
+                           href="{{ path('site_advance_test_delete', {'id': test.id, 'slug': id}) }}" class="btn btn-dark"><i
+                                    class="bi bi-trash"></i></a>
+                        <a class="btn btn-danger" href="{{ path ('site_edit_advance_test', {'id': test.id}) }}"><i
                                     class="bi bi-pencil-square"></i></a>
                         <button class="run-advance-test btn btn-success" data-bs-toggle="modal"
                                 data-bs-target="#resultTestModal"

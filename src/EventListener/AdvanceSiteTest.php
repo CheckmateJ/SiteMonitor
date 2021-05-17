@@ -43,7 +43,7 @@ class AdvanceSiteTest
             foreach ($siteNotificationChannels as $siteNotificationChannel) {
                 $notificationLog = new NotificationLog();
                 $notificationLog->setSite($site);
-                $notificationLog->setDetails($entity->getDetails() != null ? 'Page have ' . $entity->getDetails() : '');
+                $notificationLog->setDetails($entity->getResult() < 1 ?  'Test failed '. $entity->getDetails() : 'Test passed');
                 $notificationLog->setNotificationChannel($siteNotificationChannel);
                 $notificationLog->setSiteTest($siteTest);
                 $this->entityManager->persist($notificationLog);

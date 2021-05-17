@@ -20,13 +20,13 @@ class SiteTestResults
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $site;
 
     /**
      * @ORM\ManyToOne(targetEntity=SiteTest::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $siteTest;
 

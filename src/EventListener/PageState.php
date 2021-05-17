@@ -40,7 +40,7 @@ class PageState
             foreach ($siteNotificationChannels as $siteNotificationChannel) {
                 $notificationLog = new NotificationLog();
                 $notificationLog->setSite($site);
-                $notificationLog->setDetails($entity->getError() ? 'Page has ' . $entity->getError() : 'Page alive');
+                $notificationLog->setDetails($entity->getError() ? $entity->getError() : '');
                 $notificationLog->setNotificationChannel($siteNotificationChannel);
                 $this->entityManager->persist($notificationLog);
             }

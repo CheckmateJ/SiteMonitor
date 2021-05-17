@@ -20,16 +20,17 @@ class SiteType extends AbstractType
                 'disabled' => $options['is_edit']
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => array_combine(Site::status, Site::status)
+                'choices' => array_combine(Site::statusKey, Site::statusValue)
             ])
             ->add('frequency', ChoiceType::class, [
-                'choices' => array_combine(Site::frequency, Site::frequency)
+                'choices' => array_combine(Site::frequencyKey, Site::frequencyValue)
             ])
             ->add('notificationChannels', EntityType::class, [
                 'class' => 'App\Entity\NotificationChannel',
                 'multiple' => true,
                 'choices' => $options['user_id']->getNotificationChannels()->toArray(),
-                'required' => false
+                'required' => false,
+                'data' => $options['notificationChannel']
             ])
             ->add('save', SubmitType::class);
     }
@@ -40,6 +41,7 @@ class SiteType extends AbstractType
             'data_class' => Site::class,
             'is_edit' => false,
             'user_id' => null,
+            'notificationChannel' => null
         ]);
     }
 }
