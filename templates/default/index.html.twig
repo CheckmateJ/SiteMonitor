@@ -3,9 +3,29 @@
 {% block title %}Hello DefaultController!{% endblock %}
 
 {% block body %}
-
-
-
-
-
+    {% if app.user %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for site in allSites %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ site }}</h5>
+                            <p>Last check:</p>
+                            {% if site.siteCheck.empty == false %}
+                                <p class="card-text"> {{ site.siteCheck.last.createdAt|date }}</p>
+                                {% if site.siteCheck.last.statusCode == 200 %}
+                                    <p class="card-text-status">Enabled</p>
+                                {% else %}
+                                    <p class="card-text-status">Disabled</p>
+                                    <div class="clear"></div>
+                                {% endif %}
+                            {% endif %}
+                            <canvas data-id="{{ site.id }}" class="recentResponseTime"
+                                 data-points='{{ site.getRecentResponseTime().getValues()|json_encode }}'></canvas>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

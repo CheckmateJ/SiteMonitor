@@ -19,18 +19,30 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
-    public function findTheLastTenRows(): array
+    public function findByDate()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+             FROM App\Entity\SiteChecks p
+             GROUP BY p.createdAt, p.site
+              ')->setMaxResults(10);
+
+        return $query->getResult();
+    }
+
+    public function findTheLastId(): array
     {
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
             'SELECT p
              FROM App\Entity\Site p
-             ORDER BY p.createdAt DESC ')->setMaxResults(10);
+             ORDER BY p.createdAt DESC ')->setMaxResults(1);
 
         return $query->getResult();
     }
-
 
     // /**
     //  * @return Site[] Returns an array of Site objects

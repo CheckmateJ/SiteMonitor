@@ -11,6 +11,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class SiteChecks
 {
+    const STATUS_OK = 1;
+    const STATUS_ERROR = 0;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,7 +22,8 @@ class SiteChecks
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="sitesCheck")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $site;
 
@@ -39,17 +43,37 @@ class SiteChecks
      */
     private $statusCode;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $timeServer;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $certificate;
+
+    /**
+     * @ORM\Column(type="string", length=400, nullable=true)
+     */
+    private $error;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ssl_status;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSite(): ?string
+    public function getSite(): ?Site
     {
         return $this->site;
     }
 
-    public function setSite(string $site): self
+    public function setSite(?Site $site): self
     {
         $this->site = $site;
 
@@ -91,4 +115,53 @@ class SiteChecks
 
         return $this;
     }
+
+    public function getTimeServer(): ?float
+    {
+        return $this->timeServer;
+    }
+
+    public function setTimeServer(float $timeServer): self
+    {
+        $this->timeServer = $timeServer;
+
+        return $this;
+    }
+
+    public function getCertificate(): ?string
+    {
+        return $this->certificate;
+    }
+
+    public function setCertificate(string $certificate): self
+    {
+        $this->certificate = $certificate;
+
+        return $this;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function setError(?string $error): self
+    {
+        $this->error = $error;
+
+        return $this;
+    }
+
+    public function getSslStatus(): ?int
+    {
+        return $this->ssl_status;
+    }
+
+    public function setSslStatus(?int $ssl_status): self
+    {
+        $this->ssl_status = $ssl_status;
+
+        return $this;
+    }
+
 }

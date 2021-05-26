@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="form-group">
+        {{ form_start(form) }}
+        {{ form_label(form.testName) }}
+        {{ form_widget(form.testName) }}
+        {{ form_label(form.url) }}
+        {{ form_widget(form.url) }}
+        {{ form_label(form.type) }}
+        <div class="type">
+            {{ form_widget(form.type) }}
+        </div>
+        <div id="type-configuration"></div>
+
+        <div id="config-input">
+            {{ form_widget(form.configuration) }}
+        </div>
+        {{ form_label(form.frequency) }}
+        {{ form_widget(form.frequency) }}
+        <a href="{{ path('site_advance_test', {'id': siteId}) }}" class="btn btn-warning btn-back btn-form">Back</a>
+        {{ form_widget(form.save, {'attr':{'class': 'btn btn-primary btn-save btn-form'}}) }}
+        {{ form_end(form) }}
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Site</th>
+            <th scope="col">Created at</th>
+            <th scope="col">Result</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for testResult in resultSiteTests %}
+            <tr>
+                <td>{{ testResult.id }}</td>
+                <td>{{ testResult.site }}</td>
+                <td>{{ testResult.createdAt |date }}</td>
+                <td>{{ testResult.result }}</td>
+                <td>{{ testResult.details }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

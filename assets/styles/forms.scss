@@ -1,0 +1,46 @@
+.password-changing{
+    width: 900px;
+    position: absolute;
+    display: table-row;
+    left: 50%;
+    top: 40%;
+    transform: translate(-15%, -50%);
+}
+.col-form-label{
+    width: 246px;
+}
+.text-input{
+    width: 246px;
+}
+.text-input-email{
+    width: 200px;
+}
+.form-notification{
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%,-50%);
+}
+#new-schema{
+    display: none;
+}
+#site_test_configuration{
+    display: none;
+}
+.hidden-input{
+    display: none !important;
+}
+.hidden-button{
+    display: none;
+}
+.show-input{
+    display: inline-block;
+    width: 300px;
+    margin: 10px;
+}
+.show-button{
+    display: inline-block;
+    margin: 10px;
+    height: 38px;
+    transform: translate(0%, -8%);
+}

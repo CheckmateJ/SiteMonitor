@@ -1,0 +1,24 @@
+table {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.table-title {
+
+}
+.notification-table{
+  width: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  &.row-notification{
+    width: auto;
+  }
+}
+.table-show{
+  display: block;
+}
+.table-hidden{
+  display: none;
+}
