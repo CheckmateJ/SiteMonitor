@@ -115,6 +115,9 @@
     "guzzlehttp/psr7": {
         "version": "1.8.1"
     },
+    "io-developer/php-whois": {
+        "version": "4.0.0"
+    },
     "jms/metadata": {
         "version": "2.5.0"
     },
@@ -624,6 +627,9 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.4.0"
+    },
+    "true/punycode": {
+        "version": "v2.1.1"
     },
     "twig/extra-bundle": {
         "version": "v3.3.0"

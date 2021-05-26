@@ -24,7 +24,7 @@ class Slack
             return;
         }
 
-
+        $test = json_encode($entity->getSiteTest()->getConfiguration());
 
         if ($entity->getNotificationChannel()->getType() == 'slack' && $entity->getSiteTest() != null) {
 
@@ -34,7 +34,7 @@ class Slack
             $client->post($slackUrl,
                 [
                     'json' => [
-                        'text' =>  $entity->getSiteTest()->getTestName() ? $entity->getSiteTest()->getTestName()."\r\n" .$entity->getDetails()  :  $entity->getDetails(). "\r\n" . $entity->getSiteTest()->getUrl(). "\r\n". $entity->getSiteTest()->getConfiguration() . "\r\n" . $entity->getSiteTest()->getType()
+                        'text' => $entity->getSiteTest()->getTestName() ? 'Domain: ' . $entity->getSite()->getDomainName() . $entity->getSiteTest()->getUrl() . "\r\n" . 'Test Name: ' . $entity->getSiteTest()->getTestName() . "\r\n" . 'Test: ' . $entity->getDetails() . "\r\n" . 'Type: ' . $entity->getSiteTest()->getType() : 'Domain: ' . $entity->getSite()->getDomainName() . $entity->getSiteTest()->getUrl() . "\r\n" . 'Test: ' . $entity->getDetails() . "\r\n" . 'Type: ' . $entity->getSiteTest()->getType()
                     ]
                 ]);
         }

@@ -35,8 +35,9 @@ class SendingMail
             ->html('
             <html>
                 <body>
-                <h4>Site ' . $entity->getSite() . '</h4>
-                    <p>Created at ' . $dateForm . '</p>' . $entity->getDetails() . ' 
+                <h4>Domain: ' . $entity->getSite() . '</h4>
+                    <p>Test: ' . $entity->getDetails() . ' 
+                    <p>Type: ' . $entity->getSiteTest()->getType(). '</p>
 				</body>
 			</html>');
 

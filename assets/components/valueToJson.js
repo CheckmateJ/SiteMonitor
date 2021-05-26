@@ -6,9 +6,7 @@ class ValueToJson extends Component {
         this.state = {editConfig: []}
         this.handleConfig = this.handleConfig.bind(this)
         this.state = {values: [], keys: []}
-        // parse props.initValue
         this.parseInitData();
-        // send configuration back to the parent
     }
 
     componentDidUpdate() {
@@ -31,11 +29,12 @@ class ValueToJson extends Component {
                     stateValue.push({text: initValue[type][i]})
                 }
             }
-            if (type === 'Ssl Expiration Test') {
-                requiredType = type === 'Ssl Expiration Test' ? 'notifyBeforeExpiration' : ''
+            if (type === 'Ssl Expiration Test' || type === 'Domain Expiration Test') {
+                requiredType = type === 'Ssl Expiration Test' || type === 'Domain Expiration Test' ? 'notifyBeforeExpiration' : ''
                 stateKey = 0
                 ssl = initValue[requiredType]
-            }if(type === 'Schema Test'){
+            }
+            if (type === 'Schema Test') {
                 document.getElementById('site_test_configuration').style.display = 'block'
                 stateValue = initValue
             } else if (type === "Header" || type === 'Required Texts') {
@@ -59,12 +58,12 @@ class ValueToJson extends Component {
         var result = {}
         const type = this.props.type
 
-        if (type === "Keyword" || type === 'Ssl Expiration Test') {
+        if (type === "Keyword" || type === 'Ssl Expiration Test' || 'Domain Expiration Test') {
             let requiredType = type === 'Keyword' ? 'Keyword' : 'notifyBeforeExpiration'
             result[requiredType] = this.props.value.map(f => {
                 return f.text
             });
-            if (type === 'Ssl Expiration Test') {
+            if (type === 'Ssl Expiration Test' || type === 'Domain Expiration Test') {
                 result[requiredType] = this.props.text
             }
         } else if (type === "Header" || type === 'Required Texts') {
